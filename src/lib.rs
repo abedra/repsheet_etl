@@ -8,9 +8,9 @@ use std::collections::hash_map::Entry::{Vacant, Occupied};
 
 #[derive(Default)]
 pub struct Actor {
-    request_count: i64,
-    methods:       HashMap<String, i64>,
-    responses:     HashMap<String, i64>,
+    pub request_count: i64,
+    pub methods:       HashMap<String, i64>,
+    pub responses:     HashMap<String, i64>,
 }
 
 struct LogEntry {
