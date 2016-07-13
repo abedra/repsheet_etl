@@ -9,6 +9,7 @@ use std::collections::hash_map::Entry::{Vacant, Occupied};
 #[derive(Default)]
 pub struct Actor {
     pub request_count: i64,
+    pub invalid_request_count: i64,
     pub methods:       HashMap<String, i64>,
     pub responses:     HashMap<String, i64>,
 }
@@ -28,6 +29,20 @@ impl LogEntry {
     }
 }
 
+fn valid_method(method: &String) -> bool {
+    match method.as_ref() {
+        "GET"     => return true,
+        "POST"    => return true,
+        "PUT"     => return true,
+        "DELETE"  => return true,
+        "HEAD"    => return true,
+        "OPTIONS" => return true,
+        "TRACE"   => return true,
+        "CONNECT" => return true,
+        _         => return false,
+    }
+}
+
 fn create_or_increment(hash: &mut HashMap<String, i64>, key: String) {
     match hash.entry(key) {
         Vacant(e) => { e.insert(1); },
@@ -38,6 +53,13 @@ fn create_or_increment(hash: &mut HashMap<String, i64>, key: String) {
 fn process_line(actors: &mut HashMap<String, Actor>, line: &str) {
     let parts: Vec<&str> = line.split(' ').collect();
     let log_entry = LogEntry { address: parts[0].to_string(), method: parts[5].replace("\"", "").to_string(), response: parts[8].to_string() };
+    if !valid_method(&log_entry.method) {
+        match actors.entry(log_entry.address) {
+            Vacant(key) => { key.insert(Actor { invalid_request_count: 1, ..Default::default() }); },
+            Occupied(mut actor) => actor.get_mut().invalid_request_count += 1,
+        }
+        return;
+    }
     if log_entry.valid() {
         match actors.entry(log_entry.address) {
             Vacant(key) => {
