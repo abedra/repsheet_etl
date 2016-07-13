@@ -9,7 +9,7 @@ fn lookup_or_zero(hash: &mut HashMap<String, i64>, key: &str) -> i64 {
     }
 }
 
-fn apply_ruleset(actors: &mut HashMap<String, repsheet_etl::Actor>) {
+fn apply_ruleset(actors: &mut HashMap<String, repsheet_etl::actor::Actor>) {
     for (address, actor) in actors {
         if lookup_or_zero(&mut actor.responses, "404") > 50 {
             println!("Blacklisting {}. Too many 404s", address);

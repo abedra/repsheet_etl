@@ -11,7 +11,7 @@ fn extract_or_zero(map: &mut HashMap<String, i64>, key: &str) -> i64 {
     }
 }
 
-fn write_csv(actors: &mut HashMap<String, repsheet_etl::Actor>) {
+fn write_csv(actors: &mut HashMap<String, repsheet_etl::actor::Actor>) {
     let mut f = File::create("out.csv").unwrap();
     let _ = f.write_all("address, number_of_requests, invalid_requests, GET, POST, PUT, DELETE, HEAD, OPTIONS, TRACE, CONNECT\n".as_bytes());
     for (address, actor) in actors {
