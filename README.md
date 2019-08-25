@@ -1,1 +1,1 @@
-See [ngx_log_parser](https://github.com/repsheet/ngx_log_parser)
+See [nginx_log_parser](https://github.com/repsheet/nginx_log_parser)
