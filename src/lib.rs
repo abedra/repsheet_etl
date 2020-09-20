@@ -5,10 +5,10 @@ use std::io::BufReader;
 use std::io::prelude::*;
 
 pub mod actor;
-mod log_entry;
-mod http;
-mod hash_utils;
+pub mod method;
 
+mod log_entry;
+mod hash_utils;
 mod nginx;
 
 pub fn process(logfile: &str) -> Result<HashMap<String, actor::Actor>, String> {

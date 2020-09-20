@@ -1,6 +1,8 @@
+use method::Method;
+
 pub struct LogEntry {
     pub address:  String,
-    pub method:   String,
+    pub method:   Method,
     pub response: String,
 }
 

@@ -3,19 +3,25 @@ use std::collections::hash_map::Entry::{Vacant, Occupied};
 
 use actor::Actor;
 use log_entry::LogEntry;
-use http;
 use hash_utils::create_or_increment;
+use method::Method;
 
 pub fn process(actors: &mut HashMap<String, Actor>, line: &str) {
     let parts: Vec<&str> = line.split(' ').collect();
-    let log_entry = LogEntry { address: parts[0].to_string(), method: parts[5].replace("\"", "").to_string(), response: parts[8].to_string() };
-    if !http::valid_method(&log_entry.method) {
+    let log_entry = LogEntry {
+        address: parts[0].to_string(),
+        method: Method::from(parts[5]),
+        response: parts[8].to_string()
+    };
+
+    if !log_entry.method.is_valid() {
         match actors.entry(log_entry.address) {
             Vacant(key) => { key.insert(Actor { invalid_request_count: 1, ..Default::default() }); },
             Occupied(mut actor) => actor.get_mut().invalid_request_count += 1,
         }
         return;
     }
+
     if log_entry.valid() {
         match actors.entry(log_entry.address) {
             Vacant(key) => {

@@ -1,7 +1,8 @@
 use std::collections::HashMap;
 use std::collections::hash_map::Entry::{Vacant, Occupied};
+use std::hash;
 
-pub fn create_or_increment(hash: &mut HashMap<String, i64>, key: String) {
+pub fn create_or_increment<A: Eq + hash::Hash>(hash: &mut HashMap<A, i64>, key: A) {
     match hash.entry(key) {
         Vacant(e) => { e.insert(1); },
         Occupied(mut e) => { *e.get_mut() += 1 },
