@@ -17,14 +17,14 @@ fn lookup_or_zero<A: Eq + hash::Hash>(hash: &mut HashMap<A, i64>, key: A) -> i64
 
 fn apply_ruleset(actors: &mut HashMap<Address, Actor>) {
     for (address, actor) in actors {
-        if lookup_or_zero(&mut actor.responses, Response::from("404")) > 10 {
+        if lookup_or_zero(&mut actor.responses, Response::from("404")) > 1 {
             println!("Blacklisting {:?}. Too many 404s", address);
         }
     }
 }
 
 fn main() {
-    match repsheet_etl::process("access.log") {
+    match repsheet_etl::process("samples/access.log") {
         Ok(mut actors) => apply_ruleset(&mut actors),
         Err(e) => println!("{}", e),
     };
