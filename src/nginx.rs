@@ -6,11 +6,12 @@ use log_entry::LogEntry;
 use hash_utils::create_or_increment;
 use method::Method;
 use response::Response;
+use address::Address;
 
-pub fn process(actors: &mut HashMap<String, Actor>, line: &str) {
+pub fn process(actors: &mut HashMap<Address, Actor>, line: &str) {
     let parts: Vec<&str> = line.split(' ').collect();
     let log_entry = LogEntry {
-        address: parts[0].to_string(),
+        address: Address::from(parts[0]),
         method: Method::from(parts[5]),
         response: Response::from(parts[8])
     };

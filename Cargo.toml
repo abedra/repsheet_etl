@@ -7,3 +7,4 @@ repository = "https://github.com/abedra/repsheet_etl"
 description = "ETL tools for repsheet"
 
 [dependencies]
+itertools = "0.9.0"
