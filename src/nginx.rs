@@ -5,13 +5,14 @@ use actor::Actor;
 use log_entry::LogEntry;
 use hash_utils::create_or_increment;
 use method::Method;
+use response::Response;
 
 pub fn process(actors: &mut HashMap<String, Actor>, line: &str) {
     let parts: Vec<&str> = line.split(' ').collect();
     let log_entry = LogEntry {
         address: parts[0].to_string(),
         method: Method::from(parts[5]),
-        response: parts[8].to_string()
+        response: Response::from(parts[8])
     };
 
     if !log_entry.method.is_valid() {

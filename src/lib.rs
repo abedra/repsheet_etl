@@ -6,6 +6,7 @@ use std::io::prelude::*;
 
 pub mod actor;
 pub mod method;
+pub mod response;
 
 mod log_entry;
 mod hash_utils;

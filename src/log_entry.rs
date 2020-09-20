@@ -1,14 +1,15 @@
 use method::Method;
+use response::Response;
 
 pub struct LogEntry {
     pub address:  String,
     pub method:   Method,
-    pub response: String,
+    pub response: Response,
 }
 
 impl LogEntry {
     pub fn valid(&self) -> bool {
-        if self.address.is_empty() || self.method.is_empty() || self.response.is_empty() {
+        if self.address.is_empty() || !self.method.is_valid() || !self.response.is_valid() {
             return false;
         }
 
@@ -22,35 +23,55 @@ mod tests {
 
     #[test]
     fn all_empty() {
-        let entry = LogEntry { address: "".into(), method: "".into(), response: "".into() };
+        let entry = LogEntry {
+            address: String::from(""),
+            method: Method::from(""),
+            response: Response::from("")
+        };
 
         assert_eq!(entry.valid(), false);
     }
 
     #[test]
     fn empty_address() {
-        let entry = LogEntry { address: "".into(), method: "GET".into(), response: "200".into() };
+        let entry = LogEntry {
+            address: String::from(""),
+            method: Method::from("GET"),
+            response: Response::from("200")
+        };
 
         assert_eq!(entry.valid(), false);
     }
 
     #[test]
     fn empty_method() {
-        let entry = LogEntry { address: "1.1.1.1".into(), method: "".into(), response: "200".into() };
+        let entry = LogEntry {
+            address: String::from("1.1.1.1"),
+            method: Method::from(""),
+            response: Response::from("200")
+        };
 
         assert_eq!(entry.valid(), false);
     }
 
     #[test]
     fn empty_response() {
-        let entry = LogEntry { address: "1.1.1.1".into(), method: "GET".into(), response: "".into() };
+        let entry = LogEntry {
+            address: String::from("1.1.1.1"),
+            method: Method::from("GET"),
+            response: Response::from("")
+        };
 
         assert_eq!(entry.valid(), false);
     }
 
     #[test]
     fn valid() {
-        let entry = LogEntry { address: "1.1.1.1".into(), method: "GET".into(), response: "200".into() };
+        let entry = LogEntry {
+            address: String::from("1.1.1.1"),
+            method: Method::from("GET"),
+            response: Response::from("200")
+        };
 
         assert_eq!(entry.valid(), true);
     }
