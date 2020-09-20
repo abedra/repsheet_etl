@@ -5,9 +5,9 @@ use std::collections::HashMap;
 use std::collections::hash_map::Entry::{Vacant, Occupied};
 
 fn extract_or_zero(map: &mut HashMap<String, i64>, key: &str) -> i64 {
-    match map.entry(key.to_string()) {
-        Occupied(e) => return *e.get(),
-        Vacant(_)   => return 0,
+    return match map.entry(key.to_string()) {
+        Occupied(e) => *e.get(),
+        Vacant(_) => 0,
     }
 }
 
@@ -40,8 +40,8 @@ fn write_csv(actors: &mut HashMap<String, repsheet_etl::actor::Actor>) {
 }
 
 fn main() {
-    let _ = match repsheet_etl::process("access.log") {
-        Ok(mut actors) => { write_csv(&mut actors) },
+    match repsheet_etl::process("access.log") {
+        Ok(mut actors) => write_csv(&mut actors),
         Err(e) => println!("{}", e),
     };
 }

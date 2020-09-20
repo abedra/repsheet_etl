@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 use std::path::Path;
 use std::fs::File;
-use std::error::Error;
 use std::io::BufReader;
 use std::io::prelude::*;
 
@@ -15,9 +14,7 @@ mod nginx;
 pub fn process(logfile: &str) -> Result<HashMap<String, actor::Actor>, String> {
     let path = Path::new(logfile);
     let file_handle = match File::open(&path) {
-        Err(why) => {
-            return Err(format!("Could not open {} : {}", path.display(), Error::description(&why)));
-        },
+        Err(why) => return Err(format!("Could not open {} : {}", path.display(), why)),
         Ok(file) => file,
     };
 
