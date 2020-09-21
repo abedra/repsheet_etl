@@ -42,3 +42,84 @@ pub fn process(actors: &mut HashMap<Address, Actor>, line: &str) {
         //TODO: Do something useful here.
     }
 }
+
+pub fn process_line(line: &str) -> Result<LogEntry, String> {
+    let parts: Vec<&str> = line.split(' ').collect();
+
+    if !(parts.len() > 9 as usize) {
+        return Err(String::from("Not enough parts"))
+    }
+
+    let log_entry = LogEntry {
+        address: Address::from(parts[0]),
+        method: Method::from(parts[5]),
+        response: Response::from(parts[8])
+    };
+
+    return if log_entry.valid() {
+        Ok(log_entry)
+    } else {
+        Err(String::from("Invalid Log Entry"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn empty_line() {
+        let line = "";
+        let result = process_line(line);
+
+        match result {
+            Ok(_) => assert!(false),
+            Err(s) => assert_eq!(s, "Not enough parts")
+        }
+    }
+
+    #[test]
+    fn invalid_address() {
+        let line = "1.1 - - [10/Nov/2017:03:31:38 -0500] \"GET / HTTP/1.1\" 200 2947 \"-\" \"Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)\"";
+        let result = process_line(line);
+
+        match result {
+            Ok(_) => assert!(false),
+            Err(s) => assert_eq!(s, "Invalid Log Entry")
+        }
+    }
+
+    #[test]
+    fn invalid_method() {
+        let line = "220.181.108.119 - - [10/Nov/2017:03:31:38 -0500] \"BAD / HTTP/1.1\" 200 2947 \"-\" \"Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)\"";
+        let result = process_line(line);
+
+        match result {
+            Ok(_) => assert!(false),
+            Err(s) => assert_eq!(s, "Invalid Log Entry")
+        }
+    }
+
+    #[test]
+    fn invalid_response_code() {
+        let line = "220.181.108.119 - - [10/Nov/2017:03:31:38 -0500] \"GET / HTTP/1.1\" 9999 2947 \"-\" \"Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)\"";
+        let result = process_line(line);
+
+        match result {
+            Ok(_) => assert!(false),
+            Err(s) => assert_eq!(s, "Invalid Log Entry")
+        }
+    }
+
+    #[test]
+    fn valid_line() {
+        let line = "220.181.108.119 - - [10/Nov/2017:03:31:38 -0500] \"GET / HTTP/1.1\" 200 2947 \"-\" \"Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)\"";
+        let result = process_line(line);
+
+        match result {
+            Ok(entry) => assert_eq!(entry.address, Address::from("220.181.108.119")),
+            Err(_) => assert!(false)
+        }
+    }
+}
+
