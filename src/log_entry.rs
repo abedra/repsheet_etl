@@ -9,12 +9,10 @@ pub struct LogEntry {
 }
 
 impl LogEntry {
-    pub fn valid(&self) -> bool {
-        if !self.address.is_valid() || !self.method.is_valid() || !self.response.is_valid() {
-            return false;
-        }
-
-        return true;
+    pub fn is_valid(&self) -> bool {
+        self.address.is_valid()
+            && self.method.is_valid()
+            && self.response.is_valid()
     }
 }
 
@@ -30,7 +28,7 @@ mod tests {
             response: Response::from("")
         };
 
-        assert_eq!(entry.valid(), false);
+        assert_eq!(entry.is_valid(), false);
     }
 
     #[test]
@@ -41,7 +39,7 @@ mod tests {
             response: Response::from("200")
         };
 
-        assert_eq!(entry.valid(), false);
+        assert_eq!(entry.is_valid(), false);
     }
 
     #[test]
@@ -52,7 +50,7 @@ mod tests {
             response: Response::from("200")
         };
 
-        assert_eq!(entry.valid(), false);
+        assert_eq!(entry.is_valid(), false);
     }
 
     #[test]
@@ -63,7 +61,7 @@ mod tests {
             response: Response::from("")
         };
 
-        assert_eq!(entry.valid(), false);
+        assert_eq!(entry.is_valid(), false);
     }
 
     #[test]
@@ -74,6 +72,6 @@ mod tests {
             response: Response::from("200")
         };
 
-        assert_eq!(entry.valid(), true);
+        assert_eq!(entry.is_valid(), true);
     }
 }

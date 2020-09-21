@@ -24,7 +24,7 @@ pub fn process(actors: &mut HashMap<Address, Actor>, line: &str) {
         return;
     }
 
-    if log_entry.valid() {
+    if log_entry.is_valid() {
         match actors.entry(log_entry.address) {
             Vacant(key) => {
                 let mut actor = Actor { request_count: 1, ..Default::default() };
@@ -56,7 +56,7 @@ pub fn process_line(line: &str) -> Result<LogEntry, String> {
         response: Response::from(parts[8])
     };
 
-    return if log_entry.valid() {
+    return if log_entry.is_valid() {
         Ok(log_entry)
     } else {
         Err(String::from("Invalid Log Entry"))
