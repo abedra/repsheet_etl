@@ -1,10 +1,14 @@
+use either::Either;
+use either::Either::{Left, Right};
+
 use log_entry::LogEntry;
+use invalid_log_entry::InvalidLogEntry;
+
 use method::Method;
 use response::Response;
 use address::Address;
-use invalid_log_entry::InvalidLogEntry;
-use either::Either;
-use either::Either::{Left, Right};
+use nginx_processing_results::NginxProcessingResults;
+use file::{collect_log_files, read_log_files};
 
 // pub fn process(actors: &mut HashMap<Address, Actor>, line: &str) {
 //     let parts: Vec<&str> = line.split(' ').collect();
@@ -36,6 +40,22 @@ use either::Either::{Left, Right};
 //         }
 //     }
 // }
+
+#[allow(dead_code)]
+pub fn process(pattern: &str) -> NginxProcessingResults {
+    let log_entries = read_log_files(collect_log_files(pattern));
+    let mut valid_entries: Vec<LogEntry> = Vec::new();
+    let mut invalid_entries: Vec<InvalidLogEntry> = Vec::new();
+
+    for entry in log_entries {
+        match process_line(entry.as_str()) {
+            Either::Left(result) => invalid_entries.push(result),
+            Either::Right(result) => valid_entries.push(result)
+        }
+    }
+
+    NginxProcessingResults{valid: valid_entries, invalid: invalid_entries}
+}
 
 pub fn process_line(line: &str) -> Either<InvalidLogEntry, LogEntry> {
     let parts: Vec<&str> = line.split(' ').collect();

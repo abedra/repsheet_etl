@@ -2,6 +2,7 @@ use std::path::PathBuf;
 use std::fs::File;
 use std::io::{BufReader, BufRead};
 
+#[allow(dead_code)]
 pub fn collect_log_files(pattern: &str) -> Vec<PathBuf> {
     let mut file_paths: Vec<PathBuf> = Vec::new();
 
@@ -15,6 +16,7 @@ pub fn collect_log_files(pattern: &str) -> Vec<PathBuf> {
     return file_paths;
 }
 
+#[allow(dead_code)]
 pub fn read_log_files(files: Vec<PathBuf>) -> Vec<String> {
     let mut logs: Vec<Vec<String>> = Vec::new();
 
@@ -25,6 +27,7 @@ pub fn read_log_files(files: Vec<PathBuf>) -> Vec<String> {
     return logs.into_iter().flatten().collect::<Vec<String>>();
 }
 
+#[allow(dead_code)]
 pub fn read_log_file(file: PathBuf) -> Vec<String> {
     let file_handle = File::open(&file).unwrap();
     let reader = BufReader::new(file_handle);

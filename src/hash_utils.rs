@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::collections::hash_map::Entry::{Vacant, Occupied};
 use std::hash;
 
+#[allow(dead_code)]
 pub fn create_or_increment<A: Eq + hash::Hash>(hash: &mut HashMap<A, i64>, key: A) {
     match hash.entry(key) {
         Vacant(e) => { e.insert(1); },
