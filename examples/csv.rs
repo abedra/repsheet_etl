@@ -44,8 +44,8 @@ fn write_csv(actors: &mut HashMap<Address, Actor>) {
 }
 
 fn main() {
-    match repsheet_etl::process("samples/access.log") {
-        Ok(mut actors) => write_csv(&mut actors),
-        Err(e) => println!("{}", e),
-    };
+    // match repsheet_etl::process("samples/access.log") {
+    //     Ok(mut actors) => write_csv(&mut actors),
+    //     Err(e) => println!("{}", e),
+    // };
 }

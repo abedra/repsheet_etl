@@ -24,8 +24,8 @@ fn apply_ruleset(actors: &mut HashMap<Address, Actor>) {
 }
 
 fn main() {
-    match repsheet_etl::process("samples/access.log") {
-        Ok(mut actors) => apply_ruleset(&mut actors),
-        Err(e) => println!("{}", e),
-    };
+    // match repsheet_etl::process("samples/access.log") {
+    //     Ok(mut actors) => apply_ruleset(&mut actors),
+    //     Err(e) => println!("{}", e),
+    // };
 }

@@ -2,6 +2,7 @@ use method::Method;
 use response::Response;
 use address::Address;
 
+#[derive(Debug)]
 pub struct LogEntry {
     pub address:  Address,
     pub method:   Method,

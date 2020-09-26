@@ -1,5 +1,5 @@
 target
 Cargo.lock
 *.csv
-samples/*.log
+samples/*
 .idea

@@ -1,6 +1,6 @@
 use std::borrow::Borrow;
 
-#[derive(Eq, PartialEq, Hash)]
+#[derive(Eq, PartialEq, Hash, Debug)]
 pub struct Response(u16);
 
 impl From<&str> for Response {
