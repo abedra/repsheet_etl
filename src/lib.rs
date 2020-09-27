@@ -2,6 +2,7 @@ extern crate core;
 extern crate itertools;
 extern crate glob;
 extern crate either;
+extern crate redis;
 
 mod file;
 mod hash_utils;

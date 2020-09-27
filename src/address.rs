@@ -1,14 +1,14 @@
 use std::net::{IpAddr, Ipv4Addr};
 use std::borrow::Borrow;
-use std::fmt::{Debug, Formatter};
+use std::fmt::{Debug, Formatter, Display};
 use core::fmt;
 use std::slice::Iter;
 use itertools::Itertools;
 
-#[derive(Eq, PartialEq, Hash)]
+#[derive(Eq, PartialEq, Hash, Debug)]
 pub struct Address(IpAddr);
 
-impl Debug for Address {
+impl Display for Address {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         return match self.0 {
             IpAddr::V4(v4) => write!(f, "{}", join(v4.octets().iter(), ".")),
