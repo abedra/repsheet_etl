@@ -7,7 +7,10 @@ use std::hash;
 use repsheet_etl::method::Method;
 use repsheet_etl::actor::Actor;
 use repsheet_etl::address::Address;
+use std::time::Instant;
+use std::borrow::BorrowMut;
 
+#[allow(dead_code)]
 fn extract_or_zero<A: Eq + hash::Hash>(map: &mut HashMap<A, i64>, key: A) -> i64 {
     return match map.entry(key) {
         Occupied(e) => *e.get(),
@@ -15,6 +18,7 @@ fn extract_or_zero<A: Eq + hash::Hash>(map: &mut HashMap<A, i64>, key: A) -> i64
     }
 }
 
+#[allow(dead_code)]
 fn write_csv(actors: &mut HashMap<Address, Actor>) {
     let mut f = File::create("out.csv").unwrap();
     let _ = f.write_all("address, number_of_requests, invalid_requests, GET, POST, PUT, DELETE, HEAD, OPTIONS, TRACE, CONNECT\n".as_bytes());
@@ -44,8 +48,11 @@ fn write_csv(actors: &mut HashMap<Address, Actor>) {
 }
 
 fn main() {
-    // match repsheet_etl::process("samples/access.log") {
-    //     Ok(mut actors) => write_csv(&mut actors),
-    //     Err(e) => println!("{}", e),
-    // };
+    let start = Instant::now();
+    let log_entries = repsheet_etl::nginx::process("samples/*");
+    let mut actors = repsheet_etl::processor::into_actors(log_entries);
+    write_csv(actors.borrow_mut());
+    let duration = start.elapsed();
+
+    println!("Processed {} actors in {:?}", actors.len(), duration);
 }

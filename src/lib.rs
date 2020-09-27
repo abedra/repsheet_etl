@@ -16,3 +16,4 @@ pub mod invalid_log_entry;
 pub mod nginx_processing_results;
 
 pub mod nginx;
+pub mod processor;

@@ -1,8 +1,12 @@
 extern crate repsheet_etl;
 
+use std::time::Instant;
+
 fn main() {
-    // match repsheet_etl::process("samples/access.log") {
-    //     Ok(actors) => println!("Processed {} actors", actors.keys().len()),
-    //     Err(e) => println!("{}", e),
-    // };
+    let start = Instant::now();
+    let log_entries = repsheet_etl::nginx::process("samples/*");
+    let actors = repsheet_etl::processor::into_actors(log_entries);
+    let duration = start.elapsed();
+
+    println!("Processed {} actors in {:?}", actors.len(), duration);
 }
